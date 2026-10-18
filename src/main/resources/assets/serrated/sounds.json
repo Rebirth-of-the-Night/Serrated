@@ -1,0 +1,32 @@
+{
+  "block.saw.active": {
+    "sounds": ["serrated:active_hum"]
+  },
+  "block.saw.cut": {
+    "sounds": ["serrated:cut_wood"],
+    "subtitle": "subtitles.serrated.saw.cut"
+  },
+  "block.saw.working": {
+    "sounds": [
+      {
+        "name": "minecart/base",
+        "pitch": 1.8
+      }
+    ]
+  },
+  "block.stonecutter.active": {
+    "sounds": ["serrated:active_hum"]
+  },
+  "block.stonecutter.cut": {
+    "sounds": ["serrated:cut_stone"],
+    "subtitle": "subtitles.serrated.stonecutter.cut"
+  },
+  "block.stonecutter.working": {
+    "sounds": [
+      {
+        "name": "minecart/base",
+        "pitch": 1.8
+      }
+    ]
+  }
+}

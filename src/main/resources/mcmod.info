@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "${modId}",
+    "name": "Serrated",
+    "description": "To show you the power of RotN, I sawed this boat in half!",
+    "version": "${modVersion}",
+    "mcversion": "${mcVersion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["phantamanta44", "Foreck1"],
+    "logoFile": "",
+    "screenshots": [],
+    "useDependencyInformation": true,
+    "dependencies": [],
+    "requiredMods": []
+  }
+]

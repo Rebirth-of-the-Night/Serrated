@@ -1,0 +1,18 @@
+itemGroup.serrated=Serrated
+
+tile.serrated.saw.name=Saw
+tile.serrated.stonecutter.name=Stonecutter
+
+container.serrated.saw=Saw
+container.serrated.stonecutter=Stonecutter
+
+tooltip.serrated.rotate_with_hand=Use while sneaking with both hands empty to rotate
+tooltip.serrated.needs_power=Needs power!
+tooltip.serrated.extra_outputs=Additional Outputs:
+tooltip.serrated.in_world_only=Must be placed in-world!
+
+subtitles.serrated.saw.cut=Saw cuts
+subtitles.serrated.stonecutter.cut=Stonecutter cuts
+
+death.attack.cutting_saw=%s was sawed in half
+death.attack.chopping_block=%s lost their head

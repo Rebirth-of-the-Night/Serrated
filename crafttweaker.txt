@@ -1,0 +1,66 @@
+class mods.serrated.CuttingSawRecipeBuilder {
+  /**
+   * Start building a recipe.
+   * @param inputItem  The item input for the recipe.
+   * @param inputBlock The block input for the recipe.
+   * @param blockOnly  If true, the recipe only accepts block inputs, in which case the
+   *                   inputItem is only used to display the recipe in the GUI.
+   */
+  static CuttingSawRecipeBuilder newRecipe(
+    IIngredient inputItem,
+    @Optional @Nullable IBlockStateMatcher inputBlock,
+    @Optional(valueBoolean = false) boolean blockOnly
+  )
+
+  /**
+   * Add an output to a recipe.
+   * @param builder The builder for the output to add.
+   */
+  CuttingSawRecipeBuilder addOutput(CuttingSawOutputBuilder builder);
+
+  /**
+   * Add an output to a recipe. Shorthand for an output with no extras.
+   * @param outputItem  The item to output.
+   * @param duration    The duration of the recipe in immersive mode.
+   * @param outputBlock The block to output when crafted in-world in immersive mode.
+   *                    If not specified, the item is dropped as an entity instead.
+   */
+  CuttingSawRecipeBuilder addOutput(
+    IItemStack outputItem,
+    @Optional(valueLong = 0) int duration,
+    @Optional @Nullable IBlockState outputBlock
+  );
+
+  /**
+   * Register the recipe with the saw.
+   * @param id A unique identifier for the recipe.
+   */
+  CuttingSawRecipeBuilder addToSaw(String id);
+
+  /**
+   * Register the recipe with the stonecutter.
+   * @param id A unique identifier for the recipe.
+   */
+  CuttingSawRecipeBuilder addToStonecutter(String id);
+}
+
+class mods.serrated.CuttingSawOutputBuilder {
+  /**
+   * Start building an output.
+   * @param outputItem  The item to output.
+   * @param duration    The duration of the recipe in immersive mode.
+   * @param outputBlock The block to output when crafted in-world in immersive mode.
+   *                    If not specified, the item is dropped as an entity instead.
+   */
+  static CuttingSawOutputBuilder newOutput(
+    IItemStack outputItem,
+    @Optional(valueLong = 0) int duration,
+    @Optional @Nullable IBlockState outputBlock
+  )
+
+  /**
+   * Add an extra output.
+   * @param stack The extra item to drop alongside the main output.
+   */
+  CuttingSawOutputBuilder addExtra(IItemStack stack);
+}

@@ -1,0 +1,52 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "serrated:saw"
+  },
+  "variants": {
+    "facing": {
+      "up": {},
+      "down": {
+        "x": 180
+      },
+      "north": {
+        "x": 90
+      },
+      "east": {
+        "x": 90,
+        "y": 90
+      },
+      "south": {
+        "x": 90,
+        "y": 180
+      },
+      "west": {
+        "x": 90,
+        "y": 270
+      }
+    },
+    "roll": {
+      "false": {},
+      "true": {
+        "model": "serrated:saw_roll"
+      }
+    },
+    "axles": {
+      "false": {},
+      "true": {
+        "textures": {
+          "side_axle": "serrated:blocks/saw_side_input",
+          "bottom": "serrated:blocks/saw_bottom_input"
+        }
+      }
+    },
+    "active": {
+      "false": {},
+      "true": {
+        "textures": {
+          "blade": "serrated:blocks/saw_blade_active"
+        }
+      }
+    }
+  }
+}
