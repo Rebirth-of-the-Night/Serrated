@@ -63,9 +63,10 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
     protected TileEntityCuttingSaw(final CuttingSawType type) {
         this.type = type;
         this.immersiveRecipeConfig.defaultReturnValue(0); // should already be 0, but just to be sure
-        this.activeSound = SerrConfig.activeSound
+        final SerrConfig.SawBlockConfig config = SerrConfig.getSawConfig(type);
+        this.activeSound = config.activeSound
                 ? Serrated.PROXY.newMachineSound(this, type.getActiveSound(), 0.75F) : null;
-        this.workingSound = SerrConfig.workingSound
+        this.workingSound = config.workingSound
                 ? Serrated.PROXY.newMachineSound(this, type.getWorkingSound(), 0.25F) : null;
     }
 
@@ -124,7 +125,7 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
     }
 
     public boolean isActive() {
-        return bwmMech.getPower() >= SerrConfig.powerRequired;
+        return bwmMech.getPower() >= SerrConfig.getSawConfig(type).powerRequired;
     }
 
     public void setImmersiveFocusFromGui(final ItemStack stack) {
@@ -199,12 +200,12 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
 
     @Override
     public int getMinimumInput() {
-        return SerrConfig.powerRequired;
+        return SerrConfig.getSawConfig(type).powerRequired;
     }
 
     @Override
     public int getMaximumInput() {
-        return SerrConfig.powerMaximum;
+        return SerrConfig.getSawConfig(type).powerMaximum;
     }
 
     public void checkPower() {
@@ -217,7 +218,8 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
 
     public void tryDamageEntity(final EntityLivingBase entity) {
         if (!isActive()) return;
-        if (SerrBwmCompat.LOADED && SerrConfig.chopBonusDamage > 0) {
+        final SerrConfig.SawBlockConfig config = SerrConfig.getSawConfig(type);
+        if (SerrBwmCompat.LOADED && config.chopBonusDamage > 0) {
             final IBlockState sawState = world.getBlockState(pos);
             if (!(sawState.getBlock() instanceof BlockCuttingSaw)) return;
             BlockPos searchPos = pos.offset(sawState.getValue(BlockCuttingSaw.FACING));
@@ -227,7 +229,7 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
                 final SerrBwmCompat.ChoppingBlockResult result = SerrBwmCompat.isChoppingBlock(state);
                 if (result != SerrBwmCompat.ChoppingBlockResult.NO) {
                     if (entity.attackEntityFrom(SerrBwmCompat.getSawDamageSource(world, true),
-                            (float) (SerrConfig.contactDamage + SerrConfig.chopBonusDamage))) {
+                            (float) (config.contactDamage + config.chopBonusDamage))) {
                         entity.recentlyHit = 60;
                         if (shouldStain && result == SerrBwmCompat.ChoppingBlockResult.CLEAN) {
                             SerrBwmCompat.stainChoppingBlock(world, searchPos);
@@ -243,13 +245,13 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
                 searchPos = searchPos.down();
             }
         }
-        if (entity.attackEntityFrom(SerrBwmCompat.getSawDamageSource(world, false), (float) SerrConfig.contactDamage)) {
+        if (entity.attackEntityFrom(SerrBwmCompat.getSawDamageSource(world, false), (float) config.contactDamage)) {
             entity.recentlyHit = 60;
         }
     }
 
     public void tryStartBlockCrafting() {
-        if (craftingJob != null || !SerrConfig.immersiveMode) return;
+        if (craftingJob != null || !SerrConfig.getSawConfig(type).immersiveMode) return;
         final IBlockState sawState = world.getBlockState(pos);
         if (!(sawState.getBlock() instanceof BlockCuttingSaw)) return;
         final IBlockState targetState = world.getBlockState(pos.offset(sawState.getValue(BlockCuttingSaw.FACING)));
@@ -274,7 +276,7 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
     }
 
     public void tryStartItemCrafting(final EntityItem entity) {
-        if (craftingJob != null || !SerrConfig.immersiveMode) {
+        if (craftingJob != null || !SerrConfig.getSawConfig(type).immersiveMode) {
             return;
         }
         final NBTTagCompound data = entity.getEntityData();
@@ -315,7 +317,7 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
                         case NOT_DONE:
                             break;
                         case DONE:
-                            if (SerrConfig.finishedSound) {
+                            if (SerrConfig.getSawConfig(type).finishedSound) {
                                 world.playSound(null, pos, type.getCutSound(), SoundCategory.BLOCKS,
                                         0.75F, 0.93F + 0.14F * world.rand.nextFloat());
                             }

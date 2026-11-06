@@ -22,7 +22,8 @@ import java.util.Collections;
 
 public abstract class ContainerCuttingSaw extends Container {
     public static ContainerCuttingSaw create(final TileEntityCuttingSaw saw, final InventoryPlayer playerInv) {
-        return SerrConfig.immersiveMode ? new Immersive(saw, playerInv) : new Workbench(saw, playerInv);
+        return SerrConfig.getSawConfig(saw.getType()).immersiveMode
+                ? new Immersive(saw, playerInv) : new Workbench(saw, playerInv);
     }
 
     protected final TileEntityCuttingSaw saw;
@@ -89,6 +90,11 @@ public abstract class ContainerCuttingSaw extends Container {
             outputSlot = new SlotOutput(resultInv, 8, 56);
             addSlotToContainer(outputSlot);
             addPlayerInventory();
+        }
+
+        @Override
+        public boolean canInteractWith(final EntityPlayer player) {
+            return !SerrConfig.getSawConfig(saw.getType()).immersiveMode && super.canInteractWith(player);
         }
 
         @Nullable
@@ -212,7 +218,7 @@ public abstract class ContainerCuttingSaw extends Container {
 
             @Override
             public boolean canTakeStack(final EntityPlayer player) {
-                return !SerrConfig.immersiveMode && saw.isActive();
+                return saw.isActive();
             }
 
             @Override
@@ -289,7 +295,7 @@ public abstract class ContainerCuttingSaw extends Container {
 
             @Override
             public ItemStack extractItem(final int slot, final int amount, final boolean simulate) {
-                if (activeRecipe == null || SerrConfig.immersiveMode) return ItemStack.EMPTY;
+                if (activeRecipe == null) return ItemStack.EMPTY;
                 final CuttingSawRecipe.Output output = activeRecipe.getOutput(activeOutput);
                 if (output == null || !saw.isActive()) return ItemStack.EMPTY;
                 final ItemStack outputStack = output.getItem();
@@ -328,6 +334,11 @@ public abstract class ContainerCuttingSaw extends Container {
             super(saw, playerInv);
             addSlotToContainer(new SlotFocus(8, 18));
             addPlayerInventory();
+        }
+
+        @Override
+        public boolean canInteractWith(final EntityPlayer player) {
+            return SerrConfig.getSawConfig(saw.getType()).immersiveMode && super.canInteractWith(player);
         }
 
         @Nullable

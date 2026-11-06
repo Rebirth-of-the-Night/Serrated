@@ -18,14 +18,16 @@ import java.util.List;
 
 @JEIPlugin
 public class SerrJeiPlugin implements IModPlugin {
-    // this class MUST be loaded only after the config is loaded!
-    public static final int vPadding = Math.max((SerrConfig.jeiExtraOutputRows - 1) * 9, 12);
+    private static int computeVerticalPadding(final CuttingSawType type) {
+        return Math.max((SerrConfig.getSawConfig(type).jeiExtraOutputRows - 1) * 9, 4);
+    }
 
     @Override
     public void registerCategories(final IRecipeCategoryRegistration registry) {
         final IGuiHelper guiHelper = registry.getJeiHelpers().getGuiHelper();
         for (final CuttingSawType type : CuttingSawType.values()) {
-            registry.addRecipeCategories(new JeiCuttingSawRecipeCategory(type, guiHelper));
+            registry.addRecipeCategories(
+                    new JeiCuttingSawRecipeCategory(type, computeVerticalPadding(type), guiHelper));
         }
     }
 
@@ -34,10 +36,11 @@ public class SerrJeiPlugin implements IModPlugin {
         final IStackHelper stackHelper = registry.getJeiHelpers().getStackHelper();
         for (final CuttingSawType type : CuttingSawType.values()) {
             final String uid = type.getJeiUid();
+            final int vPadding = computeVerticalPadding(type);
             final List<JeiCuttingSawRecipeWrapper> wrappers = new ArrayList<>();
             for (final CuttingSawRecipe recipe : type.getRecipes()) {
                 for (final CuttingSawRecipe.Output output : recipe.getOutputs()) {
-                    wrappers.add(new JeiCuttingSawRecipeWrapper(recipe, output, stackHelper));
+                    wrappers.add(new JeiCuttingSawRecipeWrapper(type, recipe, output, vPadding, stackHelper));
                 }
             }
             registry.addRecipes(wrappers, uid);

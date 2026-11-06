@@ -18,16 +18,17 @@ public class JeiCuttingSawRecipeCategory implements IRecipeCategory<JeiCuttingSa
 
     private final CuttingSawType type;
     private final IDrawable bg;
+    private final int vPadding;
 
-    public JeiCuttingSawRecipeCategory(final CuttingSawType type, final IGuiHelper guiHelper) {
+    public JeiCuttingSawRecipeCategory(final CuttingSawType type, final int vPadding, final IGuiHelper guiHelper) {
         this.type = type;
         final IDrawableBuilder bgBuilder = guiHelper.drawableBuilder(
                         new ResourceLocation(SerrConst.MOD_ID, "textures/gui/jei/cutting_saw.png"), 0, 0, 66, 18)
                 .setTextureSize(159, 18);
-        if (SerrConfig.jeiExtraOutputRows > 0) {
-            bgBuilder.addPadding(SerrJeiPlugin.vPadding, SerrJeiPlugin.vPadding, 0, 159 - 66);
-        }
+        bgBuilder.addPadding(
+                vPadding, vPadding, 0, SerrConfig.getSawConfig(type).jeiExtraOutputRows > 0 ? 159 - 66 : 0);
         this.bg = bgBuilder.build();
+        this.vPadding = vPadding;
     }
 
     @Override
@@ -54,8 +55,8 @@ public class JeiCuttingSawRecipeCategory implements IRecipeCategory<JeiCuttingSa
     public void setRecipe(final IRecipeLayout recipeLayout, final JeiCuttingSawRecipeWrapper recipeWrapper,
                           final IIngredients ingredients) {
         final IGuiItemStackGroup itemGroup = recipeLayout.getItemStacks();
-        itemGroup.init(0, true, 0, SerrJeiPlugin.vPadding);
-        itemGroup.init(1, false, 48, SerrJeiPlugin.vPadding);
+        itemGroup.init(0, true, 0, vPadding);
+        itemGroup.init(1, false, 48, vPadding);
         recipeWrapper.initExtraSlots(itemGroup);
         itemGroup.set(ingredients);
     }

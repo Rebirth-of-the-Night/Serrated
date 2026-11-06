@@ -117,7 +117,7 @@ public class BlockCuttingSaw extends BlockDirectional implements ITileEntityProv
     @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(final IBlockState state, final IBlockAccess world, final BlockPos pos) {
-        if (SerrConfig.powerRequired > 0) {
+        if (SerrConfig.getSawConfig(type).powerRequired > 0) {
             final TileEntity te = world.getTileEntity(pos);
             return state.withProperty(AXLES, true)
                     .withProperty(ACTIVE, te instanceof TileEntityCuttingSaw && ((TileEntityCuttingSaw) te).isActive());
@@ -226,7 +226,8 @@ public class BlockCuttingSaw extends BlockDirectional implements ITileEntityProv
                                     final EntityPlayer player, final EnumHand hand, final EnumFacing facing,
                                     final float hitX, final float hitY, final float hitZ) {
         if (world.isRemote) return true;
-        if (player.getHeldItemMainhand().isEmpty() && player.getHeldItemOffhand().isEmpty() && player.isSneaking()) {
+        if (SerrConfig.getSawConfig(type).rotateWithHand && player.getHeldItemMainhand().isEmpty()
+                && player.getHeldItemOffhand().isEmpty() && player.isSneaking()) {
             world.playSound(null, pos, getSoundType(state, world, pos, player).getPlaceSound(),
                     SoundCategory.BLOCKS, 1F, world.rand.nextFloat() * 0.1F + 0.9F);
             rotateBlock(world, pos, facing);
@@ -255,7 +256,7 @@ public class BlockCuttingSaw extends BlockDirectional implements ITileEntityProv
         if (te instanceof TileEntityCuttingSaw) {
             if (entity instanceof EntityItem) {
                 ((TileEntityCuttingSaw) te).tryStartItemCrafting((EntityItem) entity);
-            } else if (SerrConfig.contactDamage > 0 && entity instanceof EntityLivingBase) {
+            } else if (SerrConfig.getSawConfig(type).contactDamage > 0 && entity instanceof EntityLivingBase) {
                 ((TileEntityCuttingSaw) te).tryDamageEntity((EntityLivingBase) entity);
             }
         }
@@ -346,7 +347,7 @@ public class BlockCuttingSaw extends BlockDirectional implements ITileEntityProv
     @Override
     public void addInformation(final ItemStack stack, @Nullable final World worldIn, final List<String> tooltip,
                                final ITooltipFlag flags) {
-        if (SerrConfig.rotateWithHand) {
+        if (SerrConfig.getSawConfig(type).rotateWithHand) {
             tooltip.add(I18n.format("tooltip." + SerrConst.MOD_ID + ".rotate_with_hand"));
         }
     }

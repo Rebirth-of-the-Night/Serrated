@@ -16,6 +16,7 @@ import org.jspecify.annotations.Nullable;
 import st.evening.mc.rotnsaws.SerrConfig;
 import st.evening.mc.rotnsaws.SerrConst;
 import st.evening.mc.rotnsaws.feature.saw.CuttingSawRecipe;
+import st.evening.mc.rotnsaws.feature.saw.CuttingSawType;
 
 import javax.vecmath.Point2i;
 import java.util.ArrayList;
@@ -49,14 +50,19 @@ public class JeiCuttingSawRecipeWrapper implements IRecipeWrapper {
         return positions;
     }
 
+    private final CuttingSawType type;
     private final CuttingSawRecipe recipe;
     private final CuttingSawRecipe.Output output;
+    private final int vPadding;
     private final IStackHelper stackHelper;
 
-    public JeiCuttingSawRecipeWrapper(final CuttingSawRecipe recipe, final CuttingSawRecipe.Output output,
+    public JeiCuttingSawRecipeWrapper(final CuttingSawType type, final CuttingSawRecipe recipe,
+                                      final CuttingSawRecipe.Output output, final int vPadding,
                                       final IStackHelper stackHelper) {
+        this.type = type;
         this.recipe = recipe;
         this.output = output;
+        this.vPadding = vPadding;
         this.stackHelper = stackHelper;
     }
 
@@ -78,7 +84,7 @@ public class JeiCuttingSawRecipeWrapper implements IRecipeWrapper {
         final List<Point2i> positions = getSlotPositions(count);
         for (int i = 0; i < count; i++) {
             final Point2i pos = positions.get(i);
-            itemGroup.init(2 + i, false, pos.x, SerrJeiPlugin.vPadding + pos.y);
+            itemGroup.init(2 + i, false, pos.x, vPadding + pos.y);
         }
     }
 
@@ -86,17 +92,17 @@ public class JeiCuttingSawRecipeWrapper implements IRecipeWrapper {
     public void drawInfo(final Minecraft mc, final int recipeWidth, final int recipeHeight,
                          final int mouseX, final int mouseY) {
         if (!output.getExtra().isEmpty()) {
-            Gui.drawModalRectWithCustomSizedTexture(66, SerrJeiPlugin.vPadding, 66, 0, 159 - 66, 18, 159, 18);
+            Gui.drawModalRectWithCustomSizedTexture(66, vPadding, 66, 0, 159 - 66, 18, 159, 18);
             final int count = output.getExtra().size();
             final List<Point2i> positions = getSlotPositions(count);
             for (int i = 0; i < count; i++) {
                 final Point2i pos = positions.get(i);
-                Gui.drawModalRectWithCustomSizedTexture(pos.x, SerrJeiPlugin.vPadding + pos.y, 48, 0, 18, 18, 159, 18);
+                Gui.drawModalRectWithCustomSizedTexture(pos.x, vPadding + pos.y, 48, 0, 18, 18, 159, 18);
             }
         }
-        if (SerrConfig.immersiveMode && recipe.isBlockOnly()) {
+        if (SerrConfig.getSawConfig(type).immersiveMode && recipe.isBlockOnly()) {
             mc.fontRenderer.drawString(I18n.format("tooltip." + SerrConst.MOD_ID + ".in_world_only"),
-                    0, SerrJeiPlugin.vPadding + 21, 0xDE0000);
+                    0, vPadding + 21, 0xDE0000);
         }
     }
 }
