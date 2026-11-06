@@ -210,10 +210,10 @@ public abstract class TileEntityCuttingSaw extends TileEntity implements ITickab
 
     public void checkPower() {
         if (bwmMech.updatePower() && !world.isRemote) {
-            tryStartBlockCrafting();
             markDirty();
             powerSyncDirty = true;
         }
+        tryStartBlockCrafting();
     }
 
     public void tryDamageEntity(final EntityLivingBase entity) {
