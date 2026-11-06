@@ -58,6 +58,11 @@ public class CrTCuttingSawRecipeBuilder {
     }
 
     @ZenMethod
+    public boolean isEmpty() {
+        return outputs.isEmpty();
+    }
+
+    @ZenMethod
     public CrTCuttingSawRecipeBuilder addToSaw(final String id) {
         addToRegistry(CuttingSawType.SAW, id);
         return this;
