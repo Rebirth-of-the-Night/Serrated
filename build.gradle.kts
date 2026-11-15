@@ -5,7 +5,7 @@ plugins {
 }
 
 val modId: String = "serrated"
-version = "1.0.0"
+version = "1.0.1"
 group = "st.evening.mc.rotnsaws"
 
 val minecraftVersion: String = "1.12.2"
